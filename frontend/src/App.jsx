@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Header from '@/components/Header.jsx'
-import Raffles from '@/components/Raffles.jsx'
-import Winners from '@/components/Winners.jsx'
-import Seasonal from '@/components/Seasonal.jsx'
-import Team from '@/components/Team.jsx'
-import FAQ from '@/components/FAQ.jsx'
-import DevTests from '@/components/DevTests.jsx'
+import NavBar from '@/components/NavBar.jsx'
 import Home from '@/pages/Home.jsx'
-import AboutUs from '@/pages/AboutUs.jsx'
+import Raffles from '@/pages/Raffles.jsx'
+import Winners from '@/pages/Winners.jsx'
+import About from '@/pages/About.jsx'
 import HowItWorks from '@/components/HowItWorks.jsx'
-import Container from '@/components/Container.jsx'
+import Container from '@/components/Layout/Container.jsx'
+import DevPanel from '@/components/DevPanel.jsx'
 
 export default function App() {
   const [credits, setCredits] = useState(0)
@@ -75,8 +72,8 @@ export default function App() {
         </div>
       </div>
 
-      <Container variant="wide" className="my-6">
-        <Header
+      <Container className="my-6">
+        <NavBar
           credits={credits}
           loggedIn={loggedIn}
           avatarUrl={avatarUrl}
@@ -97,14 +94,11 @@ export default function App() {
             <Route path="/how" element={<HowItWorks />} />
             <Route path="/raffles" element={<Raffles raffles={raffles} />} />
             <Route path="/winners" element={<Winners winners={winners} />} />
-            <Route path="/seasonal" element={<Seasonal />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/faq" element={<FAQ />} />
+            <Route path="/about" element={<About />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
 
-          <DevTests
+          <DevPanel
             setPromoCode={setPromoCode}
             setPromoMsg={setPromoMsg}
             runRedeem={handleRedeem}

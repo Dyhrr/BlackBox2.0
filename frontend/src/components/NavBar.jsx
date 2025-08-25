@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
-export default function Header({ credits, loggedIn, avatarUrl, onSimLogin, onLogout }) {
+export default function NavBar({ credits, loggedIn, avatarUrl, onSimLogin, onLogout }) {
   const [open, setOpen] = useState(false)
 
   const NavItem = ({ to, label, onClick }) => (
@@ -38,10 +38,7 @@ export default function Header({ credits, loggedIn, avatarUrl, onSimLogin, onLog
           <NavItem to="/how" label="How it works" />
           <NavItem to="/raffles" label="Raffles" />
           <NavItem to="/winners" label="Winners" />
-          <NavItem to="/seasonal" label="Seasonal" />
-          <NavItem to="/team" label="Team" />
           <NavItem to="/about" label="About" />
-          <NavItem to="/faq" label="FAQ" />
         </nav>
 
         {/* Right controls */}
@@ -98,11 +95,8 @@ export default function Header({ credits, loggedIn, avatarUrl, onSimLogin, onLog
               <NavItem to="/how" label="How it works" />
               <NavItem to="/raffles" label="Raffles" />
               <NavItem to="/winners" label="Winners" />
-              <NavItem to="/seasonal" label="Seasonal" />
-              <NavItem to="/team" label="Team" />
               <NavItem to="/about" label="About" />
-              <NavItem to="/faq" label="FAQ" />
-            </div>
+              </div>
 
             <div className="mt-6 border-t border-white/10 pt-4">
               <p className="text-xs text-zinc-400">Credits: <span className="text-zinc-200">{credits}</span></p>

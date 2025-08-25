@@ -10,5 +10,6 @@ cd frontend
 npm run dev
 
 # terminal 2
+cd backend
 python manage.py runserver
 ```

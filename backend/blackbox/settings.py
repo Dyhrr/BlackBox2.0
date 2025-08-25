@@ -14,9 +14,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'api',
-    'blackbox', 
-    'django_vite',
+    'blackbox',
 ]
+
+INSTALLED_APPS += ['django_vite']
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -56,7 +57,7 @@ DATABASES = {
     }
 }
 
-DJANGO_VITE_DEV_MODE = DEBUG
+DJANGO_VITE_DEV_MODE = True
 DJANGO_VITE_DEV_SERVER_HOST = "127.0.0.1"
 DJANGO_VITE_DEV_SERVER_PORT = 5173
 

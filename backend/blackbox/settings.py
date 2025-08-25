@@ -58,11 +58,23 @@ DATABASES = {
 }
 
 DJANGO_VITE_DEV_MODE = True
+DJANGO_VITE_DEV_SERVER_PROTOCOL = "http"
 DJANGO_VITE_DEV_SERVER_HOST = "127.0.0.1"
 DJANGO_VITE_DEV_SERVER_PORT = 5173
 
-DJANGO_VITE_ASSETS_PATH = BASE_DIR / "static" / ".vite"
-DJANGO_VITE_MANIFEST_PATH = DJANGO_VITE_ASSETS_PATH / "manifest.json"
+DJANGO_VITE_ASSETS_PATH = BASE_DIR.parent / "frontend" / "dist"
+DJANGO_VITE_MANIFEST_PATH = DJANGO_VITE_ASSETS_PATH / ".vite" / "manifest.json"
+
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": True,
+        "dev_server_protocol": "http",
+        "dev_server_host": "127.0.0.1",
+        "dev_server_port": 5173,
+        "manifest_path": DJANGO_VITE_MANIFEST_PATH,
+        "static_url_prefix": "../",
+    }
+}
 
 
 LANGUAGE_CODE = 'en-us'

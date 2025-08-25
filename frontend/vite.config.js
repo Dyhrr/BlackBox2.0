@@ -6,7 +6,12 @@ export default defineConfig(({ mode }) => ({
   plugins: [react()],
   base: mode === "development" ? "/" : "/static/",
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
-  server: { host: "127.0.0.1", port: 5173, strictPort: true },
+  server: {
+    host: "127.0.0.1",
+    port: 5173,
+    strictPort: true,
+    hmr: { host: "127.0.0.1", protocol: "ws", clientPort: 5173 },
+  },
   build: {
     outDir: "../backend/static/.vite",
     manifest: true,

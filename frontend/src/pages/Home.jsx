@@ -1,6 +1,7 @@
 import React from 'react'
 import PromoCode from '@/components/PromoCode.jsx'
 import { Link } from 'react-router-dom'
+import Button from '@/components/ui/Button.jsx'
 
 export default function Home({ promoCode, setPromoCode, promoMsg, onRedeem }) {
   return (
@@ -13,20 +14,19 @@ export default function Home({ promoCode, setPromoCode, promoMsg, onRedeem }) {
             </h1>
             <p className="mt-3 text-sm sm:text-base text-zinc-300">Community-run. Fast credits. Draws you can verify. We never ask for your Torn API key.</p>
             <div className="mt-5 flex flex-wrap items-center gap-3">
-              <a href="https://www.torn.com/profiles.php?XID=2277924" className="rounded-2xl bg-white px-5 py-3 text-sm font-bold text-black hover:opacity-90">Open Crikelz [2277924]</a>
-              <Link to="/how" className="rounded-2xl border border-white/20 px-5 py-3 text-sm font-semibold text-zinc-200 hover:bg-white/5">How It Works</Link>
+              <Button as="a" href="https://www.torn.com/profiles.php?XID=2277924" variant="primary">Open Crikelz [2277924]</Button>
+              <Button as={Link} to="/how" variant="secondary">How it works</Button>
             </div>
-            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="mt-6 flex flex-wrap gap-3">
               {[
-                ['No API Keys', 'Discord OAuth Only'],
-                ['1–2 min', 'Fast Credit Top-ups'],
-                ['Transparent', 'Verifiable Draws'],
-                ['Torn-Only', 'Unofficial & Community-run'],
-              ].map(([small, big]) => (
-                <div key={small} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left">
-                  <p className="text-[11px] tracking-wide text-zinc-400">{small}</p>
-                  <p className="text-sm font-semibold">{big}</p>
-                </div>
+                ['Discord OAuth Only'],
+                ['Fast Credit Top-ups'],
+                ['Verifiable Draws'],
+                ['Unofficial & Community-run'],
+              ].map((label) => (
+                <Button key={label} variant="ghost" className="text-xs px-3 py-1">
+                  {label}
+                </Button>
               ))}
             </div>
           </div>

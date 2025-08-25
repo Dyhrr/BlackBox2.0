@@ -56,22 +56,12 @@ DATABASES = {
     }
 }
 
+DJANGO_VITE_DEV_MODE = DEBUG
+DJANGO_VITE_DEV_SERVER_HOST = "127.0.0.1"
+DJANGO_VITE_DEV_SERVER_PORT = 5173
 
-if DEBUG:
-    DJANGO_VITE = {
-        "default": {
-            "dev_mode": True,
-            "dev_server_host": "127.0.0.1",
-            "dev_server_port": 5173,
-        }
-    }
-else:
-    DJANGO_VITE = {
-        "default": {
-            "dev_mode": False,
-            "manifest_path": BASE_DIR / "static" / ".vite" / "manifest.json",
-        }
-    }
+DJANGO_VITE_ASSETS_PATH = BASE_DIR / "static" / ".vite"
+DJANGO_VITE_MANIFEST_PATH = DJANGO_VITE_ASSETS_PATH / "manifest.json"
 
 
 LANGUAGE_CODE = 'en-us'
@@ -84,8 +74,3 @@ STATICFILES_DIRS = [ BASE_DIR / 'static' ]
 STATIC_ROOT = BASE_DIR / 'static_root'
 
 CORS_ALLOW_ALL_ORIGINS = True
-
-
-# Vite integration
-VITE_DEV_SERVER = 'http://127.0.0.1:5173'
-VITE_MANIFEST_PATH = BASE_DIR / 'static' / '.vite' / 'manifest.json'

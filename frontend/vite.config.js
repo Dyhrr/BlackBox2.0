@@ -3,14 +3,16 @@ import react from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig(({ mode }) => ({
+  base: mode === "production" ? "/static/" : "/",
   plugins: [react()],
-  base: mode === "development" ? "/" : "/static/",
-  resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
+  resolve: {
+    alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
+  },
   server: {
     host: "127.0.0.1",
     port: 5173,
     strictPort: true,
-    hmr: { host: "127.0.0.1", protocol: "ws", clientPort: 5173 },
+    hmr: { host: "127.0.0.1", port: 5173 },
   },
   build: {
     outDir: "../backend/static/.vite",

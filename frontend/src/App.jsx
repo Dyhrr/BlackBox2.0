@@ -6,7 +6,6 @@ import Raffles from '@/pages/Raffles.jsx'
 import Winners from '@/pages/Winners.jsx'
 import About from '@/pages/About.jsx'
 import HowItWorks from '@/components/HowItWorks.jsx'
-import Container from '@/components/Layout/Container.jsx'
 import DevPanel from '@/components/DevPanel.jsx'
 
 export default function App() {
@@ -56,48 +55,33 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-ink-900 text-zinc-100 selection:bg-zinc-200 selection:text-black">
-      {/* Background grid */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(80rem_50rem_at_50%_-20%,rgba(255,255,255,0.06),transparent)]" />
-        <div className="absolute inset-0 opacity-[0.07] [mask-image:radial-gradient(60rem_40rem_at_center,black,transparent)]">
-          <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-        </div>
-      </div>
+    <>
+      <NavBar
+        credits={credits}
+        loggedIn={loggedIn}
+        avatarUrl={avatarUrl}
+        onSimLogin={() => { setLoggedIn(true); setAvatarUrl('https://cdn.discordapp.com/embed/avatars/1.png') }}
+        onLogout={() => { setLoggedIn(false); setAvatarUrl(null) }}
+      />
 
-      <Container className="my-6">
-        <NavBar
-          credits={credits}
-          loggedIn={loggedIn}
-          avatarUrl={avatarUrl}
-          onSimLogin={() => { setLoggedIn(true); setAvatarUrl('https://cdn.discordapp.com/embed/avatars/1.png') }}
-          onLogout={() => { setLoggedIn(false); setAvatarUrl(null) }}
-        />
-
-        <main className="space-y-10">
-          <Routes>
-            <Route path="/" element={
-              <Home
-                promoCode={promoCode}
-                setPromoCode={setPromoCode}
-                promoMsg={promoMsg}
-                onRedeem={handleRedeem}
-              />
-            } />
-            <Route path="/how" element={<HowItWorks />} />
-            <Route path="/raffles" element={<Raffles raffles={raffles} />} />
-            <Route path="/winners" element={<Winners winners={winners} />} />
-            <Route path="/about" element={<About />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-
+      <main>
+        <Routes>
+          <Route path="/" element={
+            <Home
+              promoCode={promoCode}
+              setPromoCode={setPromoCode}
+              promoMsg={promoMsg}
+              onRedeem={handleRedeem}
+              winners={winners}
+            />
+          } />
+          <Route path="/how" element={<HowItWorks />} />
+          <Route path="/raffles" element={<Raffles raffles={raffles} />} />
+          <Route path="/winners" element={<Winners winners={winners} />} />
+          <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <div className="container">
           <DevPanel
             setPromoCode={setPromoCode}
             setPromoMsg={setPromoMsg}
@@ -105,19 +89,21 @@ export default function App() {
             setLoggedIn={setLoggedIn}
             setAvatarUrl={setAvatarUrl}
           />
-        </main>
+        </div>
+      </main>
 
-        <footer className="mt-12 border-t border-white/10 py-8 text-center text-xs text-zinc-400">
+      <footer className="section">
+        <div className="container text-center text-xs text-zinc-400">
           <p>© {new Date().getFullYear()} Blackbox — Unofficial, community-run. Not affiliated with Torn LTD.</p>
-        </footer>
-      </Container>
-    </div>
+        </div>
+      </footer>
+    </>
   )
 }
 
 function NotFound() {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
+    <div className="card p-6 text-center">
       <h2 className="text-xl font-semibold">Page not found</h2>
       <p className="text-sm text-zinc-400">The page you’re looking for doesn’t exist.</p>
     </div>

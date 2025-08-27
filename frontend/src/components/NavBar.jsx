@@ -9,8 +9,8 @@ export default function NavBar({ credits, loggedIn, avatarUrl, onSimLogin, onLog
       to={to}
       onClick={() => { setOpen(false); onClick?.() }}
       className={({ isActive }) =>
-        'block rounded-xl px-3 py-2 ' +
-        (isActive ? 'bg-white/10 text-white' : 'hover:bg-white/5 hover:text-white text-zinc-300')
+        'underline px-3 py-2 ' +
+        (isActive ? 'text-white' : 'text-zinc-300 hover:text-white')
       }
     >
       {label}
@@ -18,8 +18,8 @@ export default function NavBar({ credits, loggedIn, avatarUrl, onSimLogin, onLog
   )
 
   return (
-    <header className="sticky top-4 z-50 mb-6">
-      <div className="flex h-14 items-center justify-between rounded-2xl border border-white/10 bg-black/60 px-3 sm:px-4 backdrop-blur">
+    <header className="nav">
+      <div className="container flex h-14 items-center justify-between">
         <Link to="/" className="flex items-center gap-3">
           <span className="grid h-9 w-9 place-items-center rounded-lg bg-white/5 ring-1 ring-white/10">
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -51,10 +51,10 @@ export default function NavBar({ credits, loggedIn, avatarUrl, onSimLogin, onLog
                 alt="Discord avatar"
                 className="h-8 w-8 rounded-full ring-1 ring-white/10"
               />
-              <button onClick={onLogout} className="rounded-xl border border-white/10 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/5">Logout</button>
+              <button onClick={onLogout} className="btn btn--ghost text-xs px-3 py-1.5">Logout</button>
             </div>
           ) : (
-            <button onClick={onSimLogin} className="rounded-2xl bg-white/10 px-4 py-2 text-sm font-semibold hover:bg-white/20 flex items-center gap-2">
+            <button onClick={onSimLogin} className="btn btn--accent flex items-center gap-2 text-sm">
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
                 <path d="M20.317 4.369A19.791 19.791 0 0 0 16.558 3c-.2.36-.43.85-.59 1.23a18.27 18.27 0 0 0-5.936 0A7.26 7.26 0 0 0 9.44 3a19.736 19.736 0 0 0-3.76 1.369C2.409 8.205 1.563 11.94 1.875 15.63A19.9 19.9 0 0 0 7.2 18c.42-.57.8-1.18 1.13-1.82-.62-.24-1.21-.54-1.77-.9.15-.11.3-.22.44-.33 3.36 1.57 7.01 1.57 10.34 0 .15.11.3.22.45.33-.56.36-1.15.66-1.77.9.33.64.71 1.25 1.13 1.82a19.84 19.84 0 0 0 5.33-2.37c.44-4.94-.75-8.63-2.79-11.26ZM9.86 13.5c-.8 0-1.46-.73-1.46-1.62s.64-1.63 1.46-1.63c.82 0 1.48.73 1.46 1.63 0 .89-.64 1.62-1.46 1.62Zm4.29 0c-.8 0-1.46-.73-1.46-1.62s.66-1.63 1.46-1.63c.82 0 1.48.73 1.46 1.63 0 .89-.64 1.62-1.46 1.62Z" />
               </svg>
@@ -98,16 +98,16 @@ export default function NavBar({ credits, loggedIn, avatarUrl, onSimLogin, onLog
               <NavItem to="/about" label="About" />
               </div>
 
-            <div className="mt-6 border-t border-white/10 pt-4">
-              <p className="text-xs text-zinc-400">Credits: <span className="text-zinc-200">{credits}</span></p>
-              <div className="mt-3">
-                {loggedIn ? (
-                  <button onClick={() => { onLogout(); setOpen(false) }} className="w-full rounded-xl border border-white/10 px-3 py-2 text-xs text-zinc-300 hover:bg-white/5">Logout</button>
-                ) : (
-                  <button onClick={() => { onSimLogin(); setOpen(false) }} className="w-full rounded-xl bg-white/10 px-3 py-2 text-sm font-semibold hover:bg-white/20">Login (Discord)</button>
-                )}
+              <div className="mt-6 border-t border-white/10 pt-4">
+                <p className="text-xs text-zinc-400">Credits: <span className="text-zinc-200">{credits}</span></p>
+                <div className="mt-3">
+                  {loggedIn ? (
+                    <button onClick={() => { onLogout(); setOpen(false) }} className="btn btn--ghost w-full text-xs">Logout</button>
+                  ) : (
+                    <button onClick={() => { onSimLogin(); setOpen(false) }} className="btn btn--accent w-full text-sm">Login (Discord)</button>
+                  )}
+                </div>
               </div>
-            </div>
           </div>
         </div>
       )}

@@ -4,20 +4,110 @@
 @tailwind components;
 @tailwind utilities;
 
-/* progress styling */
-progress {
-  appearance: none;
-  width: 100%;
-  height: 4px;
-  border-radius: 9999px;
-  overflow: hidden;
+:root{
+  --bg-0:#0c0c0e;
+  --bg-1:#111114;
+  --bg-2:#15161a;
+  --text-0:#e9e9ed;
+  --text-1:#b7b9c0;
+  --muted:#7a7f87;
+  --accent:#7CF0BD; /* single brand accent; keep */
+  --card-bd:rgba(255,255,255,.06);
+  --card-hi:rgba(255,255,255,.12);
+  --ring: 0 0 0 2px var(--accent);
+  --radius:14px;
+  --dur:120ms;
 }
-progress::-webkit-progress-bar {
-  background: rgba(255, 255, 255, 0.1);
+
+html,body,#root{height:100%}
+body{
+  color:var(--text-0);
+  background:
+    radial-gradient(80% 60% at 30% -10%, #1a1c22 0%, transparent 60%),
+    radial-gradient(70% 50% at 100% 0%, #11131a 0%, transparent 55%),
+    var(--bg-0);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
-progress::-webkit-progress-value {
-  background: rgba(255, 255, 255, 0.7);
+
+/* ultra-low noise overlay for texture */
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:-1;
+  background-image:url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'>\
+  <filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' /></filter>\
+  <rect width='100%' height='100%' filter='url(%23n)' opacity='0.035'/></svg>");
+  mix-blend-mode:soft-light;
 }
-progress::-moz-progress-bar {
-  background: rgba(255, 255, 255, 0.7);
+
+/* layout rhythm */
+.container{ max-width:1180px; margin:0 auto; padding:0 20px; }
+.section{ padding:48px 0; }
+.section + .section{ border-top:1px solid rgba(255,255,255,.07); }
+
+/* navigation (sticky glass) */
+.nav{
+  position:sticky; top:0; z-index:40;
+  backdrop-filter:saturate(120%) blur(8px);
+  background:linear-gradient(180deg, rgba(17,17,20,.85), rgba(17,17,20,.65));
+  border-bottom:1px solid rgba(255,255,255,.07);
 }
+
+/* cards */
+.card{
+  background:linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  border:1px solid var(--card-bd);
+  border-radius:var(--radius);
+  box-shadow: inset 0 1px 0 var(--card-hi);
+  transition: transform var(--dur) ease, border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+.card:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.14); }
+.card:focus-within{ outline:var(--ring); outline-offset:2px; }
+
+/* buttons */
+.btn{
+  background:#fff; color:#111; border-radius:999px; padding:10px 16px;
+  border:0; transition:transform var(--dur) ease, opacity var(--dur) ease, box-shadow var(--dur) ease;
+}
+.btn:hover{ transform:translateY(-1px); }
+.btn:active{ transform:translateY(0); opacity:.95; }
+.btn--ghost{ background:transparent; color:var(--text-0); border:1px solid var(--card-bd); }
+.btn--accent{ background:var(--accent); color:#101213; box-shadow:0 0 0 0 rgba(124,240,189,.6); }
+.btn--accent:hover{ box-shadow:0 0 0 6px rgba(124,240,189,.08); }
+
+/* progress bars */
+.progress{
+  height:6px; border-radius:999px; background:rgba(255,255,255,.06); overflow:hidden;
+}
+.progress__bar{
+  height:100%; width:0%;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.25), rgba(255,255,255,0) 40%) center/16px 100% no-repeat,
+    linear-gradient(90deg, var(--accent), #5dd9a2);
+  transition:width 300ms ease;
+}
+
+/* links underline animation */
+a{ color:var(--text-0); text-decoration:none; }
+a.underline{
+  background:linear-gradient(currentColor,currentColor) center bottom/0 2px no-repeat;
+  transition:background-size var(--dur) ease,color var(--dur) ease;
+}
+a.underline:hover{ color:#fff; background-size:100% 2px; }
+
+/* accordion chevron */
+.accordion__chev{ transition: transform var(--dur) ease; }
+details[open] .accordion__chev{ transform:rotate(180deg); }
+
+/* focus-visible */
+:where(button, [href], input, select, textarea, [tabindex]):focus-visible{
+  outline:var(--ring);
+  outline-offset:2px;
+}
+
+/* ticker */
+.ticker{ height:36px; overflow:hidden; color:var(--muted); }
+.ticker__row{ display:flex; align-items:center; gap:32px; white-space:nowrap; animation:ticker 30s linear infinite; }
+.ticker:hover .ticker__row{ animation-play-state:paused; }
+@keyframes ticker{ to{ transform:translateX(-50%); } }

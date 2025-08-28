@@ -12,7 +12,7 @@ export default function Home({ promoCode, setPromoCode, promoMsg, onRedeem, winn
           <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
             <div>
               <h1 className="text-[clamp(2.25rem,6vw,3.875rem)] font-black leading-[1.05] tracking-tight">
-                Torn-only raffles, instant wins, <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-200 to-white">zero fluff</span>.
+                BlackBox Casino and Raffles
               </h1>
               <p className="mt-3 text-sm sm:text-base text-zinc-300">Community-run. Fast credits. Draws you can verify. We never ask for your Torn API key.</p>
               <div className="mt-5 flex flex-wrap items-center gap-3">

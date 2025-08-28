@@ -37,6 +37,7 @@ export default function NavBar({ credits, loggedIn, avatarUrl, onSimLogin, onLog
         <nav className="hidden md:flex items-center gap-2 text-sm">
           <NavItem to="/how" label="How it works" />
           <NavItem to="/raffles" label="Raffles" />
+          <NavItem to="/games" label="Games" />
           <NavItem to="/winners" label="Winners" />
           <NavItem to="/about" label="About" />
         </nav>
@@ -94,6 +95,7 @@ export default function NavBar({ credits, loggedIn, avatarUrl, onSimLogin, onLog
             <div className="mt-4 space-y-1 text-sm">
               <NavItem to="/how" label="How it works" />
               <NavItem to="/raffles" label="Raffles" />
+              <NavItem to="/games" label="Games" />
               <NavItem to="/winners" label="Winners" />
               <NavItem to="/about" label="About" />
               </div>

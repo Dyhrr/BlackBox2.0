@@ -1,19 +1,21 @@
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 import json
 
-@csrf_exempt
 def redeem(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'POST only'}, status=405)
     try:
         data = json.loads(request.body.decode('utf-8'))
-        code = (data.get('code') or '').strip().upper()
+        code = (data.get('code') or '').strip()
     except Exception:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
 
-    if not code:
-        return JsonResponse({'error': 'Enter a code from Discord.'}, status=400)
+    # Validate code: only allow alphanumeric and dashes, max length 32
+    import re
+    if not code or not re.fullmatch(r'[A-Za-z0-9\-]{1,32}', code):
+        return JsonResponse({'error': 'Invalid promo code format.'}, status=400)
+    code = code.upper()
+
     if code == 'INVALID':
         return JsonResponse({'error': 'Code not found.'}, status=404)
     if code == 'USED':

@@ -1,5 +1,6 @@
 import React from 'react'
 import PromoCode from '@/components/PromoCode.jsx'
+import HowItWorks from '@/components/HowItWorks.jsx'
 import { Link } from 'react-router-dom'
 import Button from '@/components/ui/Button.jsx'
 import WinnersTicker from '@/components/WinnersTicker.jsx'
@@ -17,7 +18,6 @@ export default function Home({ promoCode, setPromoCode, promoMsg, onRedeem, winn
               <p className="mt-3 text-sm sm:text-base text-zinc-300">Community-run. Fast credits. Draws you can verify. We never ask for your Torn API key.</p>
               <div className="mt-5 flex flex-wrap items-center gap-3">
                 <Button as="a" href="https://www.torn.com/profiles.php?XID=2277924" variant="primary">Open Crikelz [2277924]</Button>
-                <Button as={Link} to="/how" variant="secondary">How it works</Button>
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
                 {[
@@ -42,6 +42,7 @@ export default function Home({ promoCode, setPromoCode, promoMsg, onRedeem, winn
         </div>
       </section>
 
+      <HowItWorks />
       <PromoCode
         promoCode={promoCode}
         setPromoCode={setPromoCode}

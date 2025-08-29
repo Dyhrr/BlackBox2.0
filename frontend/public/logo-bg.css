@@ -1,0 +1,37 @@
+/* Subtle repeated logo background
+   - Uses /static/Logo.png so it works in Vite (frontend/public/static/Logo.png)
+     and in Django when served from STATIC_URL.
+   - The pattern is dimmed via a top gradient overlay so content is unaffected. */
+
+:root{
+  --bb-bg: #111;                  /* nearly black base */
+  /* Prefer root-served in Vite dev, fallback to Django static in prod */
+  --bb-logo-dev: url('/Logo.png');
+  --bb-logo-prod: url('/static/Logo.png');
+  --bb-size: 120px 120px;         /* tile size */
+  --bb-overlay-alpha: 0.10;       /* increase to darken pattern more */
+}
+
+html, body { height: 100%; }
+
+body {
+  /* Base color */
+  background-color: var(--bb-bg);
+
+  /* Layer 1: dark overlay (for extra subtlety)
+     Layer 2: Vite dev path (/Logo.png)
+     Layer 3: Django static path (/static/Logo.png) */
+  background-image:
+    linear-gradient(rgba(17,17,17,var(--bb-overlay-alpha)), rgba(17,17,17,var(--bb-overlay-alpha))),
+    var(--bb-logo-dev),
+    var(--bb-logo-prod);
+  background-repeat: no-repeat, repeat, repeat;
+  background-size: auto, var(--bb-size), var(--bb-size);
+  background-position: 0 0, 0 0, 0 0;
+  background-attachment: scroll, scroll, scroll; /* set to fixed for a stationary pattern */
+}
+
+/* Optional: increase overlay on small screens where busy patterns can distract */
+@media (max-width: 768px) {
+  :root { --bb-overlay-alpha: 0.14; }
+}

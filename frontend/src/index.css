@@ -1,3 +1,48 @@
+/* Background pattern now provided by public/logo-bg.css to ensure consistent
+   behavior across Vite dev and Django static in production. */
+/* Side banners for partner ads */
+.side-banner {
+  position: fixed;
+  top: 32px;
+  width: 240px;
+  height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 30, 30, 0.75);
+  z-index: 1000;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25), 0 1.5px 8px 0 rgba(0,0,0,0.10);
+  border-radius: 32px;
+  margin-left: 16px;
+  margin-right: 16px;
+  backdrop-filter: blur(6px);
+  border: none;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.left-banner {
+  left: 0;
+}
+.right-banner {
+  right: 0;
+}
+.side-banner a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #222;
+  transition: background 0.2s;
+}
+.side-banner a:hover {
+  background: #444;
+}
+@media (max-width: 900px) {
+  .side-banner {
+    display: none;
+  }
+}
 @import "./styles/tokens.css";
 
 @tailwind base;

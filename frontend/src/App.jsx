@@ -73,16 +73,22 @@ export default function App() {
     }
   }
 
+  // Hide partner ads on /admin route
+  const isAdminRoute = window.location.pathname.startsWith('/admin');
   return (
     <>
-      <div className="side-banner left-banner">
-        {/* Partner Ad - Left */}
-        <a href="#" target="_blank" rel="noopener noreferrer">Partner Ad</a>
-      </div>
-      <div className="side-banner right-banner">
-        {/* Partner Ad - Right */}
-        <a href="#" target="_blank" rel="noopener noreferrer">Partner Ad</a>
-      </div>
+      {!isAdminRoute && (
+        <>
+          <div className="side-banner left-banner">
+            {/* Partner Ad - Left */}
+            <a href="#" target="_blank" rel="noopener noreferrer">Partner Ad</a>
+          </div>
+          <div className="side-banner right-banner">
+            {/* Partner Ad - Right */}
+            <a href="#" target="_blank" rel="noopener noreferrer">Partner Ad</a>
+          </div>
+        </>
+      )}
       <main>
         <NavBar
           credits={credits}

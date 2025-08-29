@@ -55,5 +55,10 @@ BlackBox2.0 is a raffle and instant win platform built with Django (backend) and
 - Never use DEBUG=True or hardcoded secrets in production.
 - Always use HTTPS and secure your server.
 
+### Frontend admin controls
+- `VITE_ENABLE_DEV_ADMIN` (default off in prod): when `true`, enables Admin route and simulated login for development.
+- `VITE_ADMIN_IDS` (comma-separated Discord IDs): whitelist allowed to access Admin, e.g. `VITE_ADMIN_IDS=123,456,789`.
+- Optional: `VITE_ADMIN_USERS` (JSON array for dev test login), e.g. `[{"username":"dev","password":"dev"}]`. Only used when dev admin is enabled.
+
 ## Accessibility & SEO
 - The frontend is designed with accessibility and SEO in mind. Please report any issues or suggestions.

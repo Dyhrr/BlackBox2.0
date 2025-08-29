@@ -2,7 +2,7 @@
 // BlackBox2.0 Casino Platform
 // Crafted by Dyhr (https://github.com/Dyhrr)
 //
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import NavBar from '@/components/NavBar.jsx'
 import Home from '@/pages/Home.jsx'
@@ -12,6 +12,7 @@ import About from '@/pages/About.jsx'
 import HowItWorks from '@/components/HowItWorks.jsx'
 import DevPanel from '@/components/DevPanel.jsx'
 import Games from '@/pages/Games.jsx'
+import { DEV_ADMIN, ALLOWED_ADMIN_IDS } from '@/constants/admin.js'
 
 export default function App() {
   useEffect(() => {
@@ -21,9 +22,15 @@ export default function App() {
   const [credits, setCredits] = useState(0)
   const [loggedIn, setLoggedIn] = useState(false)
   const [avatarUrl, setAvatarUrl] = useState(null)
+  const [discordId, setDiscordId] = useState(null) // Discord user ID
 
   const [promoMsg, setPromoMsg] = useState('')
   const [promoCode, setPromoCode] = useState('')
+
+  let Admin = null
+  if (DEV_ADMIN) {
+    Admin = lazy(() => import('@/pages/Admin.jsx'))
+  }
 
   const raffles = [
     { id: 'raff-1', kind: 'Raffle',      title: '$100,000 Ticket — Big Pot',           badge: '$100k / ticket', max: 1000, value: 412 },
@@ -52,34 +59,51 @@ export default function App() {
       const add = Number(data.tickets_added || 0)
       setCredits(c => c + add)
       setPromoMsg(add > 0 ? `+${add} tickets added.` : 'Redeemed.')
-    } catch {
-      const key = code.toUpperCase()
-      if (key === 'INVALID') return setPromoMsg('Code not found.')
-      if (key === 'USED') return setPromoMsg('This code was already redeemed.')
-      if (key === 'EXPIRED') return setPromoMsg('This code has expired.')
-      if (key === 'NOTELIGIBLE') return setPromoMsg("Your Discord account isn't eligible for this code.")
-      setCredits(c => c + 10)
-      setPromoMsg('+10 tickets added.')
+    } catch (err) {
+      // In dev, allow friendly error messages for test codes; never mint credits client-side
+      const offline = import.meta.env.VITE_ENABLE_DEV_REDEEM_OFFLINE === 'true'
+      if (offline) {
+        const key = code.toUpperCase()
+        if (key === 'INVALID') return setPromoMsg('Code not found.')
+        if (key === 'USED') return setPromoMsg('This code was already redeemed.')
+        if (key === 'EXPIRED') return setPromoMsg('This code has expired.')
+        if (key === 'NOTELIGIBLE') return setPromoMsg("Your Discord account isn't eligible for this code.")
+      }
+      setPromoMsg('Network error. Please try again.')
     }
   }
 
+  // Hide partner ads on /admin route
+  const isAdminRoute = window.location.pathname.startsWith('/admin');
   return (
     <>
-      <div className="side-banner left-banner">
-        {/* Partner Ad - Left */}
-        <a href="#" target="_blank" rel="noopener noreferrer">Partner Ad</a>
-      </div>
-      <div className="side-banner right-banner">
-        {/* Partner Ad - Right */}
-        <a href="#" target="_blank" rel="noopener noreferrer">Partner Ad</a>
-      </div>
+      {!isAdminRoute && (
+        <>
+          <div className="side-banner left-banner">
+            {/* Partner Ad - Left */}
+            <a href="#" target="_blank" rel="noopener noreferrer">Partner Ad</a>
+          </div>
+          <div className="side-banner right-banner">
+            {/* Partner Ad - Right */}
+            <a href="#" target="_blank" rel="noopener noreferrer">Partner Ad</a>
+          </div>
+        </>
+      )}
       <main>
         <NavBar
           credits={credits}
           loggedIn={loggedIn}
           avatarUrl={avatarUrl}
-          onSimLogin={() => { setLoggedIn(true); setAvatarUrl('https://cdn.discordapp.com/embed/avatars/1.png') }}
-          onLogout={() => { setLoggedIn(false); setAvatarUrl(null) }}
+          onSimLogin={() => {
+            setLoggedIn(true);
+            setAvatarUrl('https://cdn.discordapp.com/embed/avatars/1.png');
+            // Cycle through allowed Discord IDs for dev testing
+            const allowed = ['344538646457876481','720053524620378134','303898072860065792'];
+            const nextId = allowed[(allowed.indexOf(discordId) + 1) % allowed.length];
+            setDiscordId(nextId || allowed[0]);
+          }}
+          onLogout={() => { setLoggedIn(false); setAvatarUrl(null); setDiscordId(null); }}
+          discordId={discordId}
         />
         <Routes>
           <Route path="/" element={
@@ -92,6 +116,15 @@ export default function App() {
             />
           } />
           {/* <Route path="/how" element={<HowItWorks />} /> removed: now part of Home */}
+          {DEV_ADMIN && (
+            <Route path="/admin" element={
+              loggedIn && ALLOWED_ADMIN_IDS.includes(discordId)
+                ? (
+                  <Suspense fallback={<div />}>{Admin ? <Admin discordId={discordId} /> : null}</Suspense>
+                )
+                : <NotFound />
+            } />
+          )}
           <Route path="/raffles" element={<Raffles raffles={raffles} />} />
           <Route path="/winners" element={<Winners winners={winners} />} />
           <Route path="/about" element={<About />} />
@@ -125,4 +158,3 @@ function NotFound() {
     </section>
   )
 }
-

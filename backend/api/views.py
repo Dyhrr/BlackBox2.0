@@ -1,3 +1,9 @@
+# TODO
+# - Add endpoints for raffle creation and management
+# - Implement user credit adjustment API
+# - Add broadcast message API
+# - Secure admin-only endpoints
+
 from django.http import JsonResponse
 import json
 

@@ -1,5 +1,11 @@
 import Card from '../components/ui/Card';
 
+// #TODO
+// - Add new casino games (slots, blackjack, etc.)
+// - Integrate game results with backend
+// - Show user game history
+// - Add leaderboard for top winners
+
 const games = [
   { title: 'Blackjack', description: 'Try your luck against the dealer in classic Blackjack.' },
   { title: 'Roulette', description: 'Place your bets and spin the wheel in Roulette.' },

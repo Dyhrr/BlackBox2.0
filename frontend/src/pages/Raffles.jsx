@@ -1,6 +1,12 @@
 import Card from '@/components/ui/Card.jsx';
 import Button from '@/components/ui/Button.jsx';
 
+// #TODO
+// - Add backend integration for creating raffles
+// - Implement raffle ticket purchase flow
+// - Display live raffle countdowns
+// - Add admin controls for managing raffles
+
 export default function Raffles({ raffles = [] }) {
   const seasonal = [
     ['Featured', 'Faction Honour Crown', 'Limited seasonal. Watch Discord for drop times.'],

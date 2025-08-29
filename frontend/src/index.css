@@ -1,3 +1,5 @@
+
+@import "./styles/tokens.css";
 /* Background pattern now provided by public/logo-bg.css to ensure consistent
    behavior across Vite dev and Django static in production. */
 /* Side banners for partner ads */
@@ -43,7 +45,6 @@
     display: none;
   }
 }
-@import "./styles/tokens.css";
 
 @tailwind base;
 @tailwind components;

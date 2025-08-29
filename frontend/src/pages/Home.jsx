@@ -5,6 +5,12 @@ import { Link } from 'react-router-dom'
 import Button from '@/components/ui/Button.jsx'
 import WinnersTicker from '@/components/WinnersTicker.jsx'
 
+// #TODO
+// - Add promo code history for users
+// - Show upcoming raffles and events
+// - Add Discord login integration
+// - Display recent site announcements
+
 export default function Home({ promoCode, setPromoCode, promoMsg, onRedeem, winners = [] }) {
   return (
     <>

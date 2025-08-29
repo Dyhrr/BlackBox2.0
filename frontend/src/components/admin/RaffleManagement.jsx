@@ -16,9 +16,7 @@ export default function RaffleManagement({ onRaffleCreate, onRaffleEdit, onRaffl
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    ticketPrice: '',
     maxTickets: '',
-    endDate: '',
     prizes: ''
   });
   const [errors, setErrors] = useState({});
@@ -33,22 +31,13 @@ export default function RaffleManagement({ onRaffleCreate, onRaffleEdit, onRaffl
       newErrors.title = "Title is required";
     }
     
-    if (!formData.ticketPrice || formData.ticketPrice <= 0) {
-      newErrors.ticketPrice = "Valid ticket price is required";
-    }
+  // Ticket price is fixed, no validation needed
     
     if (!formData.maxTickets || formData.maxTickets <= 0) {
       newErrors.maxTickets = "Valid max tickets is required";
     }
     
-    if (!formData.endDate) {
-      newErrors.endDate = "End date is required";
-    } else {
-      const endDate = new Date(formData.endDate);
-      if (endDate <= new Date()) {
-        newErrors.endDate = "End date must be in the future";
-      }
-    }
+  // No end date validation needed
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -72,11 +61,10 @@ export default function RaffleManagement({ onRaffleCreate, onRaffleEdit, onRaffl
         kind: 'Raffle',
         title: formData.title,
         description: formData.description,
-        badge: `$${formData.ticketPrice} / ticket`,
+        badge: `100k / ticket`,
         max: parseInt(formData.maxTickets),
         value: 0,
-        ticketPrice: parseFloat(formData.ticketPrice),
-        endDate: formData.endDate,
+        ticketPrice: 100000,
         status: 'active',
         createdBy: 'admin',
         prizes: formData.prizes.split(',').map(p => p.trim()).filter(p => p)
@@ -90,9 +78,7 @@ export default function RaffleManagement({ onRaffleCreate, onRaffleEdit, onRaffl
       setFormData({
         title: '',
         description: '',
-        ticketPrice: '',
         maxTickets: '',
-        endDate: '',
         prizes: ''
       });
       
@@ -175,19 +161,9 @@ export default function RaffleManagement({ onRaffleCreate, onRaffleEdit, onRaffl
             placeholder="Enter raffle title"
             required
           />
-          
-          <Input
-            label="Ticket Price"
-            type="number"
-            value={formData.ticketPrice}
-            onChange={handleChange('ticketPrice')}
-            error={errors.ticketPrice}
-            placeholder="50"
-            min="1"
-            step="0.01"
-            required
-          />
-          
+          <div className="flex items-center text-sm text-zinc-500 font-semibold pl-1 pt-6">
+            Ticket Cost: <span className="ml-2 font-bold">100k</span> (fixed)
+          </div>
           <Input
             label="Max Tickets"
             type="number"
@@ -196,15 +172,6 @@ export default function RaffleManagement({ onRaffleCreate, onRaffleEdit, onRaffl
             error={errors.maxTickets}
             placeholder="1000"
             min="1"
-            required
-          />
-          
-          <Input
-            label="End Date"
-            type="datetime-local"
-            value={formData.endDate}
-            onChange={handleChange('endDate')}
-            error={errors.endDate}
             required
           />
         </div>
@@ -247,9 +214,9 @@ export default function RaffleManagement({ onRaffleCreate, onRaffleEdit, onRaffl
                   <h5 className="font-medium text-white">{raffle.title}</h5>
                   <p className="text-sm text-zinc-400 mt-1">{raffle.description}</p>
                   <div className="flex items-center gap-4 mt-2 text-xs text-zinc-500">
-                    <span>Price: ${raffle.ticketPrice}</span>
+                    <span>Ticket Cost: <span className="font-bold">100k</span> (fixed)</span>
                     <span>Sold: {raffle.value}/{raffle.max}</span>
-                    <span>Ends: {formatEndDate(raffle.endDate)}</span>
+                    <span>Ends when all tickets are purchased</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 ml-4">

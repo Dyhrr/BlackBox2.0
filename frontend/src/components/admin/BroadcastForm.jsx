@@ -80,7 +80,7 @@ export default function BroadcastForm({ onBroadcast, adminUser = "Admin" }) {
   };
 
   return (
-    <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
+  <div className="p-6 bg-zinc-900 rounded-xl border border-zinc-800">
       <h3 className="text-lg font-semibold mb-4 text-white">Broadcast Site Announcement</h3>
       
       {error && (
@@ -106,16 +106,16 @@ export default function BroadcastForm({ onBroadcast, adminUser = "Admin" }) {
           <label className="block text-sm font-medium text-zinc-300 mb-2">
             Broadcast Type
           </label>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="flex flex-wrap gap-2">
             {broadcastTypes.map(type => (
               <button
                 key={type.value}
                 type="button"
                 onClick={() => setBroadcastType(type.value)}
                 className={`
-                  px-3 py-2 text-xs rounded-lg border transition-colors
+                  flex items-center gap-1 px-3 py-2 text-xs rounded-lg border transition-colors font-semibold
                   ${broadcastType === type.value 
-                    ? 'border-white/20 bg-white/10 text-white' 
+                    ? `${type.color} border-white/30 bg-white/10` 
                     : 'border-zinc-700 bg-zinc-800 text-zinc-400 hover:border-zinc-600'
                   }
                 `}
@@ -139,7 +139,7 @@ export default function BroadcastForm({ onBroadcast, adminUser = "Admin" }) {
         {/* Character Count */}
         <div className="flex justify-between text-xs text-zinc-400">
           <span>
-            Will be broadcast as: <span className={getTypeStyle(broadcastType)}>{adminUser}</span>
+            Will be broadcast as: <span className={getTypeStyle(broadcastType)} font-bold>{adminUser}</span>
           </span>
           <span>
             {message.length}/280 characters
@@ -151,7 +151,24 @@ export default function BroadcastForm({ onBroadcast, adminUser = "Admin" }) {
           <Button
             type="button"
             variant="secondary"
-            onClick={handlePreview}
+            onClick={() => {
+              if (!message.trim()) {
+                setError("Please enter a message to preview.");
+                return;
+              }
+              // Show preview with correct color
+              const typeConfig = broadcastTypes.find(t => t.value === broadcastType);
+              const colorClass = typeConfig ? typeConfig.color : "text-blue-400";
+              const previewWindow = window.open('', '', 'width=400,height=200');
+              previewWindow.document.write(`
+                <body style="background:#18181b;color:#fff;font-family:sans-serif;padding:24px;">
+                  <div style="font-size:16px;font-weight:bold;margin-bottom:8px;">Broadcast Preview</div>
+                  <div style="margin-bottom:8px;"><span style="font-weight:bold;">Type:</span> <span style="color:${typeConfig.value === 'info' ? '#60a5fa' : typeConfig.value === 'warning' ? '#facc15' : typeConfig.value === 'success' ? '#34d399' : '#f87171'};font-weight:bold;">${typeConfig.label}</span></div>
+                  <div style="margin-bottom:8px;"><span style="font-weight:bold;">From:</span> ${adminUser}</div>
+                  <div style="margin-bottom:8px;"><span style="font-weight:bold;">Message:</span> ${message}</div>
+                </body>
+              `);
+            }}
             disabled={!message.trim() || loading}
           >
             Preview

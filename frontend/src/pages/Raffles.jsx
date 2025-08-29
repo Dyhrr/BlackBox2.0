@@ -133,7 +133,7 @@ export default function Raffles({ raffles = mockRaffles }) {
                     {/* Status and Timer */}
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-zinc-500">
-                        Price: ${raffle.ticketPrice}
+                        Ticket Cost: <span className="font-bold">100k</span> (fixed)
                       </span>
                       <span className={status.color}>
                         {status.text}

@@ -59,6 +59,14 @@ export default function App() {
       const add = Number(data.tickets_added || 0)
       setCredits(c => c + add)
       setPromoMsg(add > 0 ? `+${add} tickets added.` : 'Redeemed.')
+      // Store promo history locally (no credits minted client-side)
+      try {
+        const raw = localStorage.getItem('bb_promo_history')
+        const list = raw ? JSON.parse(raw) : []
+        const entry = { code: code.toUpperCase(), date: new Date().toISOString(), added: add }
+        const next = Array.isArray(list) ? [...list, entry] : [entry]
+        localStorage.setItem('bb_promo_history', JSON.stringify(next))
+      } catch {}
     } catch (err) {
       // In dev, allow friendly error messages for test codes; never mint credits client-side
       const offline = import.meta.env.VITE_ENABLE_DEV_REDEEM_OFFLINE === 'true'

@@ -4,6 +4,10 @@ import HowItWorks from '@/components/HowItWorks.jsx'
 import { Link } from 'react-router-dom'
 import Button from '@/components/ui/Button.jsx'
 import WinnersTicker from '@/components/WinnersTicker.jsx'
+import Announcements from '@/components/Announcements.jsx'
+import PromoHistory from '@/components/PromoHistory.jsx'
+import { announcements } from '@/data/announcements.js'
+import { mockRaffles } from '@/data/mockData.js'
 
 // #TODO
 // - Add promo code history for users
@@ -48,6 +52,9 @@ export default function Home({ promoCode, setPromoCode, promoMsg, onRedeem, winn
         </div>
       </section>
 
+      {/* Announcements */}
+      <Announcements items={announcements} />
+
       <HowItWorks />
       <PromoCode
         promoCode={promoCode}
@@ -55,6 +62,39 @@ export default function Home({ promoCode, setPromoCode, promoMsg, onRedeem, winn
         promoMsg={promoMsg}
         onRedeem={onRedeem}
       />
+
+      {/* Upcoming / Active Raffles Preview */}
+      <section className="section">
+        <div className="container">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-xl md:text-2xl font-bold tracking-tight">Upcoming & Active Raffles</h2>
+            <Link to="/raffles" className="text-xs text-emerald-400 hover:text-emerald-300">View all →</Link>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {mockRaffles
+              .slice()
+              .sort((a,b) => new Date(a.endDate) - new Date(b.endDate))
+              .slice(0, 3)
+              .map(r => (
+                <div key={r.id} className="card p-4">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="text-[11px] uppercase tracking-widest text-zinc-400 mb-1">{r.kind}</p>
+                      <h3 className="font-semibold text-white leading-tight">{r.title}</h3>
+                      {r.description && (
+                        <p className="text-xs text-zinc-400 mt-1 line-clamp-2">{r.description}</p>
+                      )}
+                    </div>
+                    <span className="ml-2 rounded-full bg-white/10 px-2 py-1 text-xs whitespace-nowrap">{r.badge}</span>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Promo history (local only) */}
+      <PromoHistory />
     </>
   )
 }

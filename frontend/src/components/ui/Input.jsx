@@ -11,6 +11,8 @@
  * @param {Function} props.onChange - Change handler
  * @param {...any} props - Additional props passed to input
  */
+import { randomIdHex } from '@/utils/rand.js'
+
 export default function Input({ 
   label, 
   error, 
@@ -22,7 +24,7 @@ export default function Input({
   onChange,
   ...props 
 }) {
-  const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  const inputId = props.id || `input-${randomIdHex(6)}`;
   const hasError = !!error;
 
   return (

@@ -12,7 +12,7 @@ import { mockRaffles } from '@/data/mockData.js';
  * - Improved mobile responsiveness
  * - Better loading and error states
  */
-export default function Raffles({ raffles = mockRaffles }) {
+export default function Raffles({ raffles = mockRaffles, credits = 0, onSpend }) {
   const [loading, setLoading] = useState(false);
   const [joinError, setJoinError] = useState("");
 
@@ -22,15 +22,23 @@ export default function Raffles({ raffles = mockRaffles }) {
     ['Luxury', 'Donator Pack', 'Premium prize pool for big spenders.'],
   ];
 
-  const handleJoinRaffle = async (raffleId) => {
+  const handleJoinRaffle = async (raffle) => {
     setLoading(true);
     setJoinError("");
     
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log(`Joining raffle ${raffleId}`);
-      // In real app, this would make API call to join raffle
+      const cost = Number(raffle.ticketPrice ?? 100000)
+      if (typeof onSpend === 'function') {
+        const ok = onSpend(cost)
+        if (!ok) {
+          setJoinError('Insufficient credits to join this raffle.');
+          return;
+        }
+      }
+      console.log(`Joined raffle ${raffle.id} for ${cost} credits`);
+      // In real app, success would return updated balances
     } catch (error) {
       setJoinError(`Failed to join raffle: ${error.message}`);
     } finally {
@@ -96,6 +104,8 @@ export default function Raffles({ raffles = mockRaffles }) {
               const pct = Math.round((raffle.value / raffle.max) * 100);
               const status = getRaffleStatus(raffle);
               const isEnded = status.text === "Ended";
+              const cost = Number(raffle.ticketPrice ?? 100000);
+              const insufficient = credits < cost;
               
               return (
                 <Card key={raffle.id} className="p-4 md:p-6 h-full flex flex-col">
@@ -145,13 +155,15 @@ export default function Raffles({ raffles = mockRaffles }) {
                       <Button 
                         className="flex-1 text-sm" 
                         variant="primary"
-                        disabled={isEnded || loading}
-                        onClick={() => handleJoinRaffle(raffle.id)}
+                        disabled={isEnded || loading || insufficient}
+                        onClick={() => handleJoinRaffle(raffle)}
                       >
                         {loading ? (
                           <LoadingSpinner size="sm" />
                         ) : isEnded ? (
                           'Ended'
+                        ) : insufficient ? (
+                          'Insufficient'
                         ) : raffle.kind === 'Raffle' ? (
                           'Join'
                         ) : (

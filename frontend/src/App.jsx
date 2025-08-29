@@ -12,6 +12,7 @@ import About from '@/pages/About.jsx'
 import HowItWorks from '@/components/HowItWorks.jsx'
 import DevPanel from '@/components/DevPanel.jsx'
 import Games from '@/pages/Games.jsx'
+import HighLow from '@/pages/HighLow.jsx'
 import { DEV_ADMIN, ALLOWED_ADMIN_IDS } from '@/constants/admin.js'
 
 export default function App() {
@@ -45,6 +46,25 @@ export default function App() {
     { when: '2d ago',       name: 'kaiLin',      xid: '3320707', prize: '$100,000,000',    raffle: 'Big Pot' },
   ]
 
+  // Ensure credits never go negative
+  const adjustCredits = (delta) => {
+    setCredits(c => {
+      const next = c + Number(delta || 0)
+      return next < 0 ? 0 : next
+    })
+  }
+
+  // Attempt to spend; returns true if successful (no negative credits)
+  const trySpend = (amount) => {
+    amount = Math.max(0, Number(amount || 0))
+    let ok = false
+    setCredits(c => {
+      if (c >= amount) { ok = true; return c - amount }
+      ok = false; return c
+    })
+    return ok
+  }
+
   async function handleRedeem() {
     const code = promoCode.trim()
     if (!code) { setPromoMsg('Enter a code from Discord.'); return }
@@ -57,7 +77,7 @@ export default function App() {
       const data = await res.json()
       if (!res.ok) { setPromoMsg(data.error || 'Something went wrong.'); return }
       const add = Number(data.tickets_added || 0)
-      setCredits(c => c + add)
+      adjustCredits(add)
       setPromoMsg(add > 0 ? `+${add} tickets added.` : 'Redeemed.')
       // Store promo history locally (no credits minted client-side)
       try {
@@ -133,10 +153,11 @@ export default function App() {
                 : <NotFound />
             } />
           )}
-          <Route path="/raffles" element={<Raffles raffles={raffles} />} />
+          <Route path="/raffles" element={<Raffles raffles={raffles} credits={credits} onSpend={trySpend} />} />
           <Route path="/winners" element={<Winners winners={winners} />} />
           <Route path="/about" element={<About />} />
           <Route path="/games" element={<Games />} />
+          <Route path="/games/highlow" element={<HighLow />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <div className="container" aria-live="polite">

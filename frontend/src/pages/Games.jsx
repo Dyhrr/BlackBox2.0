@@ -1,6 +1,8 @@
 import Card from '../components/ui/Card';
 import { mockWinners } from '@/data/mockData.js';
 import React, { useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import Button from '@/components/ui/Button.jsx';
 
 // #TODO
 // - Add new casino games (slots, blackjack, etc.)
@@ -41,6 +43,11 @@ export default function Games() {
               <Card key={game.title} className="p-6 shadow-lg hover:scale-105 transition">
                 <h2 className="text-2xl font-semibold mb-2">{game.title}</h2>
                 <p className="text-gray-600">{game.description}</p>
+                {game.title === 'High-Low' && (
+                  <div className="mt-4">
+                    <Button as={Link} to="/games/highlow" variant="primary">Play</Button>
+                  </div>
+                )}
               </Card>
             ))}
           </div>

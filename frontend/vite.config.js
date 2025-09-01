@@ -1,3 +1,6 @@
+// Key changes:
+// - Manifest enabled for Django template integration.
+// - Base set to '/'.
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { fileURLToPath, URL } from 'node:url'

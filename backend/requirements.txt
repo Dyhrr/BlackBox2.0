@@ -1,2 +1,9 @@
+# Key changes:
+# - Added dj-database-url, whitenoise, psycopg[binary], pymysql, uvicorn.
 Django==5.0.6
 django-cors-headers==4.4.0
+dj-database-url==2.2.0
+whitenoise==6.7.0
+psycopg[binary]==3.2.1
+pymysql==1.1.1
+uvicorn==0.30.6

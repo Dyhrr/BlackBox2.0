@@ -1,64 +1,60 @@
+<!--
+Key changes:
+- Rewritten README with concise ops doc for dev/prod, ENV, and commands.
+-->
 # BlackBox2.0
 
 ## Overview
-BlackBox2.0 is a raffle and instant win platform built with Django (backend) and React (frontend).
+Django 5 backend + React (Vite) frontend. Dev uses Vite on 5173 and Django on 8000. In production, Django serves the built assets with WhiteNoise.
 
-## Setup
+## Prereqs
+- Python 3.12+
+- Node.js 20+
+- Docker (for production run via compose)
 
-### Backend (Django)
-1. Install Python 3.10+ and pip.
-2. Install dependencies:
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   ```
-3. Run migrations:
-   ```bash
-   python manage.py migrate
-   ```
-4. Start the server:
-   ```bash
-   python manage.py runserver
-   ```
+## ENV
+Copy `.env.example` to `.env` and set:
+- `DJANGO_SECRET_KEY`: required in production
+- `DJANGO_DEBUG`: `true` (dev) or `false` (prod)
+- `DJANGO_ALLOWED_HOSTS`: comma-separated hostnames
+- `CSRF_TRUSTED_ORIGINS`: comma-separated origins, e.g. `https://example.com`
+- `DATABASE_URL`: e.g. `postgres://user:pass@host:5432/dbname` or `mysql://...`
+- `ALLOW_ADMIN`: `true` to expose Django admin when not in DEBUG
 
-### Frontend (React)
-1. Install Node.js (v18+ recommended).
-2. Install dependencies:
-   ```bash
-   cd frontend
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+Frontend dev toggles (optional):
+- `VITE_SHOW_DEV_PANEL`, `VITE_ENABLE_DEV_ADMIN`, `VITE_ADMIN_IDS`
 
-## Usage
-- Access the frontend at `http://localhost:5173` (or as shown in terminal)
-- Backend API runs at `http://localhost:8000`
-- Raffles, games, and winners are available via the navigation bar
-- Promo codes can be redeemed on the homepage
+## Dev
+Use two terminals.
+- Terminal 1 (frontend):
+  - `cd frontend && npm ci && npm run dev`
+- Terminal 2 (backend):
+  - `cd backend && pip install -r requirements.txt`
+  - `python manage.py migrate` (optional for dev/sqlite)
+  - `python manage.py runserver 0.0.0.0:8000`
 
-## Contribution Guidelines
-1. Fork the repository and create a new branch for your feature or bugfix.
-2. Follow code style and naming conventions.
-3. Write tests for new features.
-4. Submit a pull request with a clear description of your changes.
-5. For issues, use the GitHub Issues tab and provide detailed steps to reproduce.
+The Django template loads Vite HMR in dev, so hitting `http://localhost:8000` shows the app.
 
-## Security & Production
-- Set environment variables for Django secrets:
-  - `DJANGO_SECRET_KEY` (required)
-  - `DJANGO_DEBUG` (set to `False` for production)
-  - `DJANGO_ALLOWED_HOSTS` (comma-separated, e.g. `blackbox.com,www.blackbox.com`)
-  - `DJANGO_CORS_ALLOWED_ORIGINS` (comma-separated, e.g. `https://blackbox.com`)
-- Never use DEBUG=True or hardcoded secrets in production.
-- Always use HTTPS and secure your server.
+## Prod
+Build and run with Docker Compose (includes optional Postgres):
+- `docker-compose up --build`
+- App: `http://localhost:8000`
 
-### Frontend admin controls
-- `VITE_ENABLE_DEV_ADMIN` (default off in prod): when `true`, enables Admin route and simulated login for development.
-- `VITE_ADMIN_IDS` (comma-separated Discord IDs): whitelist allowed to access Admin, e.g. `VITE_ADMIN_IDS=123,456,789`.
-- Optional: `VITE_ADMIN_USERS` (JSON array for dev test login), e.g. `[{"username":"dev","password":"dev"}]`. Only used when dev admin is enabled.
+On boot, the container runs `migrate` and serves `blackbox.asgi:application` via uvicorn. Static files are built by Vite and collected to `backend/staticfiles`.
 
-## Accessibility & SEO
-- The frontend is designed with accessibility and SEO in mind. Please report any issues or suggestions.
+## Commands
+- Frontend build: `cd frontend && npm run build`
+- Collect static: `cd backend && python manage.py collectstatic --noinput`
+- Django checks: `cd backend && python manage.py check`
+- DB schema (PostgreSQL): `database/schema.sql`
+- DB schema (MySQL): `database/schema.mysql.sql`
+
+## Deployment Notes
+- Set `DJANGO_DEBUG=false` and provide a valid `DATABASE_URL`.
+- Configure `DJANGO_ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`.
+- Static files are served by WhiteNoise from `/static/`.
+- Admin is disabled unless `ALLOW_ADMIN=true` or `DJANGO_DEBUG=true`.
+- Database URLs:
+  - Postgres: `postgres://user:pass@host:5432/dbname`
+  - MySQL: `mysql://user:pass@host:3306/dbname`
+- Attaching to an existing DB: `python manage.py migrate --fake-initial`

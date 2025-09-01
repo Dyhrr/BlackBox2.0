@@ -83,9 +83,20 @@ WSGI_APPLICATION = 'blackbox.wsgi.application'
 ASGI_APPLICATION = 'blackbox.asgi.application'
 
 import dj_database_url
-DATABASES = {
-    'default': dj_database_url.config(default=env_required('DATABASE_URL'), conn_max_age=600, ssl_require=not DEBUG)
-}
+
+# Use simple SQLite config if DATABASE_URL is problematic
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL and DATABASE_URL.startswith('sqlite:'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(default=env_required('DATABASE_URL'), conn_max_age=600, ssl_require=not DEBUG)
+    }
 
 # Vite integration (dev server + manifest for prod)
 VITE_DEV_SERVER = os.environ.get('VITE_DEV_SERVER', 'http://127.0.0.1:5173')
